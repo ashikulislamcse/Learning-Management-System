@@ -10,7 +10,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
+import {
+  useLoginUserMutation,
+  useRegisterUserMutation,
+} from "@/features/api/authApi";
+import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const Login = () => {
   const [signupInput, setSignupInput] = useState({
@@ -24,6 +30,25 @@ const Login = () => {
     password: "",
   });
 
+  const [
+    registerUser,
+    {
+      data: registerData,
+      error: registerError,
+      isLoading: registerIsLoading,
+      isSuccess: registerIsSuccess,
+    },
+  ] = useRegisterUserMutation();
+  const [
+    loginUser,
+    {
+      data: loginData,
+      error: loginError,
+      isLoading: loginIsLoading,
+      isSuccess: loginIsSuccess,
+    },
+  ] = useLoginUserMutation();
+
   // Input Change Handler
   const ChangeInputHandler = (e, type) => {
     const { name, value } = e.target;
@@ -34,17 +59,46 @@ const Login = () => {
     }
   };
 
-  const handleRegistration =(type)=>{
+  const handleRegistration = async (type) => {
     const inputData = type === "signup" ? signupInput : loginInput;
-    console.log(inputData);
-  }
+    const action = type === "signup" ? registerUser : loginUser;
+    await action(inputData);
+  };
+
+  useEffect(() => {
+    if (registerIsSuccess && registerData) {
+      toast.success(registerData.message || "User Register Successfully..!");
+    }
+    if (registerError) {
+      const errorMessage = registerError?.data?.message || "You are already registered";
+      toast.error(errorMessage);
+    }
+    if (loginIsSuccess && loginData) {
+      toast.success(loginData.message || "User Login Successfully..!");
+    }
+    if (loginError) {
+      const errorMessage = loginError?.data?.message || "Email or Password Not Match";
+      toast.error(errorMessage);
+    }
+  }, [
+    loginData,
+    registerData,
+    registerError,
+    registerIsSuccess,
+    loginError,
+    loginIsSuccess,
+  ]);
 
   return (
     <div className="flex items-center w-full justify-center">
       <Tabs defaultValue="signup" className="w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="signup">Signup</TabsTrigger>
-          <TabsTrigger value="login">Login</TabsTrigger>
+          <TabsTrigger className="cursor-pointer" value="signup">
+            Signup
+          </TabsTrigger>
+          <TabsTrigger className="cursor-pointer" value="login">
+            Login
+          </TabsTrigger>
         </TabsList>
 
         {/* Signup Form */}
@@ -90,7 +144,20 @@ const Login = () => {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={()=>handleRegistration("signup")}>Signup</Button>
+              <Button
+                className="cursor-pointer"
+                disabled={registerIsLoading}
+                onClick={() => handleRegistration("signup")}
+              >
+                {registerIsLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
+                    wait
+                  </>
+                ) : (
+                  "Signup"
+                )}
+              </Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -129,11 +196,23 @@ const Login = () => {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={()=>handleRegistration("login")}>Login</Button>
+              <Button
+                className="cursor-pointer"
+                disabled={loginIsLoading}
+                onClick={() => handleRegistration("login")}
+              >
+                {loginIsLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
+                    Wait
+                  </>
+                ) : (
+                  "Login"
+                )}
+              </Button>
             </CardFooter>
           </Card>
         </TabsContent>
-
       </Tabs>
     </div>
   );

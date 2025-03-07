@@ -104,7 +104,7 @@ const Login = () => {
         {/* Signup Form */}
         <TabsContent value="signup">
           <Card>
-            <CardHeader>
+            <CardHeader className="flex justify-center items-center h-full">
               <CardTitle>Signup</CardTitle>
               <CardDescription>Create a new account.</CardDescription>
             </CardHeader>
@@ -143,7 +143,7 @@ const Login = () => {
                 />
               </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex justify-center items-center h-full">
               <Button
                 className="cursor-pointer"
                 disabled={registerIsLoading}
@@ -165,7 +165,7 @@ const Login = () => {
         {/* Login Form */}
         <TabsContent value="login">
           <Card>
-            <CardHeader>
+            <CardHeader className="flex justify-center items-center h-full">
               <CardTitle>Login</CardTitle>
               <CardDescription>
                 Please enter your email and password.
@@ -195,7 +195,7 @@ const Login = () => {
                 />
               </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex justify-center items-center h-full">
               <Button
                 className="cursor-pointer"
                 disabled={loginIsLoading}

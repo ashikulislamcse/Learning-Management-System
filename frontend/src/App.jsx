@@ -1,10 +1,13 @@
 import React from 'react'
 import Login from './Pages/Login.jsx'
+import Navbar from './components/Navbar.jsx'
+
 const App = () => {
   return (
-    <div>
-      <Login/>
-    </div>
+   <>
+   <Navbar/>
+    <Login/>
+   </>
   )
 }
 

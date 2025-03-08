@@ -1,4 +1,4 @@
-import { School } from "lucide-react";
+import { Menu, School } from "lucide-react";
 import React from "react";
 import {
   DropdownMenu,
@@ -12,7 +12,7 @@ import {
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import DarkMode from "@/DarkMode";
-import { 
+import {
   Sheet,
   SheetClose,
   SheetContent,
@@ -21,21 +21,24 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
- } from "./ui/sheet";
+} from "./ui/sheet";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
+import { Separator } from "@radix-ui/react-dropdown-menu";
+import { assets } from "@/assets/assets";
 
 const Navbar = () => {
   const user = true;
   return (
-    <div className="h-16 dark:bg-[#0A0A0A] bg-white border-b dark:border-b-gray-800 border-b-gray-200 fixed top-o left-0 right-0 duration-300 z-10 mx-35">
+    <div className="h-16 dark:bg-[#0A0A0A] bg-cyan-50 border-b dark:border-b-gray-800 border-b-gray-400 fixed top-o left-0 right-0 duration-300 z-10">
       {/* Desktop */}
-      <div className="md:flex max-w-7xl mx-auto hidden justify-between items-center gap-10 h-full">
+      <div className="md:flex max-w-7xl hidden justify-between items-center gap-10 h-full mx-35">
         <div className="flex items-center gap-2">
-          <School size={30} />
-          <h1 className="hidden md:block font-extrabold text-2xl">
-            Educator BD
-          </h1>
+          <img
+            src={assets.logo}
+            alt="Educator"
+            className="w-28 lg:w-32 cursor-pointer"
+          />
         </div>
         {/* User Icon and Darkmode Icon */}
         <div className="flex items-center gap-4">
@@ -67,52 +70,64 @@ const Navbar = () => {
               <Button>Signup</Button>
             </div>
           )}
-          <DarkMode/>
+          <DarkMode />
         </div>
       </div>
       {/* Mobile Device */}
-      <MobileNavbar/>
+      <div className="flex md:hidden items-center justify-between px-4 h-full">
+        <h1 className="font-extrabold text-2xl">
+        <img
+            src={assets.logo}
+            alt="Educator"
+            className="w-28 lg:w-32 cursor-pointer"
+          />
+        </h1>
+        <MobileNavbar />
+      </div>
     </div>
   );
 };
 
 export default Navbar;
 
-
-
-const MobileNavbar = ()=>{
-  return(
+const MobileNavbar = () => {
+  const role = "instructor";
+  return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline">Open</Button>
+        <Button
+          size="icon"
+          className="rounded-full hover:bg-gray-200"
+          variant="outline"
+        >
+          <Menu />
+        </Button>
       </SheetTrigger>
-      <SheetContent>
-        <SheetHeader>
-          <SheetTitle>Edit profile</SheetTitle>
-          <SheetDescription>
-            Make changes to your profile here. Click save when you're done.
-          </SheetDescription>
+      <SheetContent className="flex flex-col">
+        <SheetHeader className="flex mx-4 flex-row items-center justify-between mt-9">
+          <div className="flex items-center gap-2">
+            <img
+              src={assets.logo}
+              alt="Educator"
+              className="w-28 lg:w-32 cursor-pointer"
+            />
+          </div>
+          <div>
+            <DarkMode />
+          </div>
         </SheetHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input id="name" value="Pedro Duarte" className="col-span-3" />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Username
-            </Label>
-            <Input id="username" value="@peduarte" className="col-span-3" />
-          </div>
-        </div>
-        <SheetFooter>
-          <SheetClose asChild>
-            <Button type="submit">Save changes</Button>
-          </SheetClose>
-        </SheetFooter>
+        <Separator className="mr-2" />
+        <nav className="flex ml-4 items-center flex-col space-y-4">
+          <span>My Learning</span>
+          <span>Edit Profile</span>
+          <p className="text-red-500">Log out</p>
+          {role === "instructor" && (
+            <SheetClose asChild>
+              <Button type="button">Dashboard</Button>
+            </SheetClose>
+          )}
+        </nav>
       </SheetContent>
     </Sheet>
-  )
-}
+  );
+};

@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar.jsx";
 import Hero from "./Pages/Student/Hero.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Courses from "./Pages/Student/Courses.jsx";
+import MyLearning from "./Pages/Student/MyLearning.jsx";
 const App = () => {
   return (
     <>
@@ -20,6 +21,7 @@ const App = () => {
             }
           />
           <Route path="/login" element={<Login />} />
+          <Route path="/my-learning" element={<MyLearning />} />
         </Routes>
       </BrowserRouter>
     </>

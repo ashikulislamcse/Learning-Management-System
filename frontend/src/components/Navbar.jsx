@@ -16,31 +16,32 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
-  SheetFooter,
   SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { assets } from "@/assets/assets";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const user = true;
+  const role = "instructor";
+
+  const Logo = () => (
+    <Link to="/">
+      <img
+        src={assets.logo}
+        alt="Educator Logo"
+        className="w-28 lg:w-32 cursor-pointer"
+      />
+    </Link>
+  );
+
   return (
-    <div className="h-16 dark:bg-[#0A0A0A] bg-cyan-50 border-b dark:border-b-gray-800 border-b-gray-400 fixed top-o left-0 right-0 duration-300 z-10">
+    <div className="h-16 dark:bg-[#0A0A0A] bg-cyan-50 border-b dark:border-b-gray-800 border-b-gray-400 fixed top-0 left-0 right-0 duration-300 z-10">
       {/* Desktop */}
       <div className="md:flex max-w-7xl hidden justify-between items-center gap-10 h-full mx-35">
-        <div className="flex items-center gap-2">
-          <img
-            src={assets.logo}
-            alt="Educator"
-            className="w-28 lg:w-32 cursor-pointer"
-          />
-        </div>
-        {/* User Icon and Darkmode Icon */}
+        <Logo />
         <div className="flex items-center gap-4">
           {user ? (
             <DropdownMenu>
@@ -57,11 +58,13 @@ const Navbar = () => {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>My Learning</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link to="my-learning">My Learning</Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem>Edit Profile</DropdownMenuItem>
                   <DropdownMenuItem>Log out</DropdownMenuItem>
                 </DropdownMenuGroup>
-                <DropdownMenuItem>Deshboard</DropdownMenuItem>
+                <DropdownMenuItem>Dashboard</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
@@ -73,16 +76,11 @@ const Navbar = () => {
           <DarkMode />
         </div>
       </div>
+
       {/* Mobile Device */}
       <div className="flex md:hidden items-center justify-between px-4 h-full">
-        <h1 className="font-extrabold text-2xl">
-        <img
-            src={assets.logo}
-            alt="Educator"
-            className="w-28 lg:w-32 cursor-pointer"
-          />
-        </h1>
-        <MobileNavbar />
+        <Logo />
+        <MobileNavbar role={role} />
       </div>
     </div>
   );
@@ -90,8 +88,7 @@ const Navbar = () => {
 
 export default Navbar;
 
-const MobileNavbar = () => {
-  const role = "instructor";
+const MobileNavbar = ({ role }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -105,20 +102,16 @@ const MobileNavbar = () => {
       </SheetTrigger>
       <SheetContent className="flex flex-col">
         <SheetHeader className="flex mx-4 flex-row items-center justify-between mt-9">
-          <div className="flex items-center gap-2">
-            <img
-              src={assets.logo}
-              alt="Educator"
-              className="w-28 lg:w-32 cursor-pointer"
-            />
-          </div>
-          <div>
-            <DarkMode />
-          </div>
+          <img
+            src={assets.logo}
+            alt="Educator Logo"
+            className="w-28 lg:w-32 cursor-pointer"
+          />
+          <DarkMode />
         </SheetHeader>
         <Separator className="mr-2" />
         <nav className="flex ml-4 items-center flex-col space-y-4">
-          <span>My Learning</span>
+          <Link to="my-learning">My Learning</Link>
           <span>Edit Profile</span>
           <p className="text-red-500">Log out</p>
           {role === "instructor" && (

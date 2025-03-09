@@ -2,6 +2,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 import Course from "./Course";
 
+
+
+const courses = [1,2,3,4,5,6];
+
+
 const Courses = () => {
   const isLoading = false;
   return (
@@ -21,7 +26,7 @@ const Courses = () => {
             <CourseSkeleton key={index} />
           ))
         ) : (
-          <Course />
+          courses.map((course, index)=><Course key={index}/>)
         )}
         </div>
       </div>

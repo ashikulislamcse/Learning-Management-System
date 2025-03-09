@@ -5,6 +5,7 @@ import Hero from "./Pages/Student/Hero.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Courses from "./Pages/Student/Courses.jsx";
 import MyLearning from "./Pages/Student/MyLearning.jsx";
+// import Profile from "./Pages/Student/Profile.jsx";
 const App = () => {
   return (
     <>
@@ -22,6 +23,7 @@ const App = () => {
           />
           <Route path="/login" element={<Login />} />
           <Route path="/my-learning" element={<MyLearning />} />
+          {/* <Route path="/profile" element={<Profile />} /> */}
         </Routes>
       </BrowserRouter>
     </>

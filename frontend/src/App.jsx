@@ -1,11 +1,18 @@
-import React from 'react'
-
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./Pages/Home/Home";
+import Navbar from "./Common/Navbar/Navbar";
 const App = () => {
   return (
-    <div>
-      <h1 className='text-3xl text-red-600'>Welcome to LMS</h1>
-    </div>
-  )
-}
+    <>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </BrowserRouter>
+    </>
+  );
+};
 
-export default App
+export default App;

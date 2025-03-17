@@ -14,7 +14,7 @@ const Hero = () => {
           We bring together world-class instructors, interactive content, <br />
           and a supportive community to help you achieve your personal and professional goals.
         </p>
-        <div className="flex justify-center">
+        <div className="flex justify-center z-0">
           <div className="relative w-full max-w-md">
             <input
               type="text"

@@ -118,46 +118,44 @@ export const Logout = async (req, res) => {
   }
 };
 
-
-
 export const UpdateProfile = async (req, res) => {
-    try {
-      const { name, email } = req.body;
-  
-      const file = req.file;
-        // Cloudinary Here
-  
-      const userId = req.id;
-      let user = await User.findById(userId);
-      if (!user) {
-        return res.status(400).json({
-          message: "User not Found",
-          success: false,
-        });
-      }
-      // Updating Data
-      if (name) user.name = name;
-      if (email) user.email = email;
-      
-      // Profile Photo Here
-  
-      await user.save();
-  
-      user = {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        enrolledCourses: user.enrolledCourses,
-        profilePhoto:user.profilePhoto,
-      };
-  
-      return res.status(200).json({
-        message: "Profile Update Successfully",
-        user,
-        success: true,
+  try {
+    const { name, email } = req.body;
+
+    const file = req.file;
+    // Cloudinary Here
+
+    const userId = req.id;
+    let user = await User.findById(userId);
+    if (!user) {
+      return res.status(400).json({
+        message: "User not Found",
+        success: false,
       });
-    } catch (error) {
-      console.log(error);
     }
-  };
+    // Updating Data
+    if (name) user.name = name;
+    if (email) user.email = email;
+
+    // Profile Photo Here
+
+    await user.save();
+
+    user = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      enrolledCourses: user.enrolledCourses,
+      profilePhoto: user.profilePhoto,
+    };
+
+    return res.status(200).json({
+      message: "Profile Update Successfully",
+      user,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -58,7 +58,7 @@ const Navbar = () => {
         <Popover>
           <PopoverTrigger asChild>
             <Avatar className="cursor-pointer hover:shadow-lg transition">
-              <AvatarImage src={user.profile.profilePhoto} alt="User" />
+              <AvatarImage src={user?.profile?.profilePhoto} alt="User" />
               <AvatarFallback>U</AvatarFallback>
             </Avatar>
           </PopoverTrigger>

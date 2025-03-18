@@ -4,6 +4,10 @@ import { FiMail, FiLock } from "react-icons/fi";
 import { USER_API_END_POINT } from "../Utils/constant";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading, setUser } from "../Redux/authSlice";
+import { Button } from "../components/ui/button";
+import { Loader2 } from "lucide-react";
 
 const LoginPage = () => {
   const [input, setInput] = useState({
@@ -13,6 +17,8 @@ const LoginPage = () => {
   });
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading } = useSelector((store) => store.auth);
 
   const changeEventHandler = (e) => {
     const { name, value } = e.target;
@@ -25,17 +31,21 @@ const LoginPage = () => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
+      dispatch(setLoading(true));
       const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
       if (res.data.success) {
+        dispatch(setUser(res.data.user));
         navigate("/home");
         toast.success(res.data.message);
       }
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 
@@ -92,16 +102,27 @@ const LoginPage = () => {
               <span className="text-gray-700 font-medium">Instructor</span>
             </label>
           </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white p-2 rounded-lg font-medium hover:bg-blue-700 transition duration-300 cursor-pointer"
-          >
-            Login
-          </button>
+
+          {loading ? (
+            <Button className="w-full my-4">
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Please Wait..
+            </Button>
+          ) : (
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white p-2 rounded-lg font-medium hover:bg-blue-700 transition duration-300 cursor-pointer"
+            >
+              Login
+            </button>
+          )}
         </form>
         <p className="text-center text-gray-600 mt-4">
-          Don't have an account? 
-          <Link to="/register" className="text-blue-600 hover:underline"> Sign Up</Link>
+          Don't have an account?
+          <Link to="/register" className="text-blue-600 hover:underline">
+            {" "}
+            Sign Up
+          </Link>
         </p>
       </div>
     </div>

@@ -6,6 +6,10 @@ import { Input } from "../components/ui/input";
 import { toast } from "sonner";
 import { USER_API_END_POINT } from "../Utils/constant";
 import { useNavigate, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "../Redux/authSlice";
+import { Button } from "../components/ui/button";
+import { Loader2 } from "lucide-react";
 
 const RegisterPage = () => {
   const [input, setInput] = useState({
@@ -17,6 +21,8 @@ const RegisterPage = () => {
   });
 
   const navigate = useNavigate();
+  const { loading } = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
 
   const changeEventHandler = (e) => {
     const { name, value } = e.target;
@@ -41,6 +47,7 @@ const RegisterPage = () => {
       formData.append("file", input.file);
     }
     try {
+      dispatch(setLoading(true));
       const res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
@@ -52,6 +59,8 @@ const RegisterPage = () => {
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 
@@ -130,16 +139,27 @@ const RegisterPage = () => {
               onChange={changeFileHandler}
             />
           </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white p-2 rounded-lg font-medium hover:bg-blue-700 transition duration-300 cursor-pointer"
-          >
-            Sign Up
-          </button>
+
+          {loading ? (
+            <Button className="w-full my-4">
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Please Wait..
+            </Button>
+          ) : (
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white p-2 rounded-lg font-medium hover:bg-blue-700 transition duration-300 cursor-pointer"
+            >
+              Sign Up
+            </button>
+          )}
         </form>
         <p className="text-center text-gray-600 mt-4">
-          Already have an account? 
-          <Link to="/login" className="text-blue-600 hover:underline"> Login</Link>
+          Already have an account?
+          <Link to="/login" className="text-blue-600 hover:underline">
+            {" "}
+            Login
+          </Link>
         </p>
       </div>
     </div>

@@ -1,6 +1,8 @@
 import User from "../Models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import getDataUri from "../Utils/datauri.js";
+import cloudinary from "../Utils/cloudinary.js";
 
 export const Register = async (req, res) => {
   try {
@@ -13,7 +15,8 @@ export const Register = async (req, res) => {
     }
 
     const file = req.file;
-    // Cloudinary is Here
+    const fileUri = getDataUri(file);
+    const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
 
     const user = await User.findOne({ email });
     if (user) {
@@ -29,6 +32,9 @@ export const Register = async (req, res) => {
       email,
       password: hashPassword,
       role,
+      profile: {
+        profilePhoto: cloudResponse.secure_url,
+      },
     });
     return res.status(200).json({
       message: "User Created Successfully",
@@ -87,7 +93,7 @@ export const Login = async (req, res) => {
       email: user.email,
       role: user.role,
       enrolledCourses: user.enrolledCourses,
-      profilePhoto: user.profilePhoto,
+      profile: user.profile,
     };
 
     return res

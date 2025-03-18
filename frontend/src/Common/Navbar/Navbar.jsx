@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LogOut, User, BookOpen } from "lucide-react";
 import Logo from "../../../public/Logo.png";
 import { assets } from "../../assets/assets";
@@ -15,11 +15,34 @@ import {
 } from "../../components/ui/popover";
 import { Button } from "../../components/ui/button";
 import { FaSignInAlt, FaUserPlus } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { USER_API_END_POINT } from "../../Utils/constant";
+import { setUser } from "../../Redux/authSlice";
+import { toast } from "sonner";
 
 const Navbar = () => {
   const [showModal, setShowModal] = useState(false);
-  const user = false;
+  const { user } = useSelector((store) => store.auth);
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const logoutHandler = async () => {
+    try {
+      const res = await axios.get(`${USER_API_END_POINT}/logout`, {
+        withCredentials: true,
+      });
+      if (res.data.success) {
+        dispatch(setUser(null));
+        navigate("/");
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
   return (
     <div className="flex items-center justify-between px-4 sm:px-10 md:px-14 lg:px-36 py-4 border-b border-gray-500 bg-cyan-100/70">
       <Link to="/">
@@ -35,7 +58,7 @@ const Navbar = () => {
         <Popover>
           <PopoverTrigger asChild>
             <Avatar className="cursor-pointer hover:shadow-lg transition">
-              <AvatarImage src="https://github.com/shadcn.png" alt="User" />
+              <AvatarImage src={user.profile.profilePhoto} alt="User" />
               <AvatarFallback>U</AvatarFallback>
             </Avatar>
           </PopoverTrigger>
@@ -47,13 +70,10 @@ const Navbar = () => {
               >
                 <User size={18} /> Profile
               </Link>
-              <Link
-                to="/my-courses"
-                className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md transition"
+              <button
+                onClick={logoutHandler}
+                className="flex items-center gap-2 p-2 text-left hover:bg-gray-100 rounded-md transition cursor-pointer"
               >
-                <BookOpen size={18} /> My Courses
-              </Link>
-              <button className="flex items-center gap-2 p-2 text-left hover:bg-gray-100 rounded-md transition cursor-pointer">
                 <LogOut size={18} /> Logout
               </button>
             </div>

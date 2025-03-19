@@ -6,6 +6,7 @@ import cors from "cors";
 import ConnectDB from "./Database/Database.js";
 ConnectDB();
 import userRoute from "./Routes/userRoute.js";
+import courseRoute from './Routes/courseRoute.js'
 
 const app = express();
 app.use(express.json());
@@ -19,6 +20,7 @@ app.use(cors(corsOption));
 
 // All Api Routes Here
 app.use("/api/user", userRoute);
+app.use("/api/course", courseRoute);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, (req, res) => {

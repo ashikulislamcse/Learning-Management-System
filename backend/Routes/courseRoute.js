@@ -1,5 +1,5 @@
 import express from 'express';
-import { CreateCourse } from '../Controllers/courseController';
+import { CreateCourse } from '../Controllers/courseController.js';
 
 
 

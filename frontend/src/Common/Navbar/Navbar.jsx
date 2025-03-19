@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { LogOut, User, BookOpen } from "lucide-react";
 import Logo from "../../../public/Logo.png";
 import { assets } from "../../assets/assets";
+import { PiSlideshowBold } from "react-icons/pi";
+
 import {
   Avatar,
   AvatarFallback,
@@ -63,20 +65,47 @@ const Navbar = () => {
             </Avatar>
           </PopoverTrigger>
           <PopoverContent className="w-44 p-2 bg-white shadow-lg rounded-md border">
-            <div className="flex flex-col gap-2">
-              <Link
-                to="/profile"
-                className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md transition"
-              >
-                <User size={18} /> Profile
-              </Link>
-              <button
-                onClick={logoutHandler}
-                className="flex items-center gap-2 p-2 text-left hover:bg-gray-100 rounded-md transition cursor-pointer"
-              >
-                <LogOut size={18} /> Logout
-              </button>
-            </div>
+            {user && user.role === "instructor" ? (
+              <>
+                <div className="flex flex-col gap-2">
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md transition"
+                  >
+                    <User size={18} /> Profile
+                  </Link>
+                  <Link
+                    to="/deshboard"
+                    className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md transition"
+                  >
+                    <PiSlideshowBold size={18} /> Deshboard
+                  </Link>
+                  <button
+                    onClick={logoutHandler}
+                    className="flex items-center gap-2 p-2 text-left hover:bg-gray-100 rounded-md transition cursor-pointer"
+                  >
+                    <LogOut size={18} /> Logout
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex flex-col gap-2">
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md transition"
+                  >
+                    <User size={18} /> Profile
+                  </Link>
+                  <button
+                    onClick={logoutHandler}
+                    className="flex items-center gap-2 p-2 text-left hover:bg-gray-100 rounded-md transition cursor-pointer"
+                  >
+                    <LogOut size={18} /> Logout
+                  </button>
+                </div>
+              </>
+            )}
           </PopoverContent>
         </Popover>
       ) : (

@@ -9,3 +9,5 @@ const CourseList = () => {
 }
 
 export default CourseList
+
+// Course List

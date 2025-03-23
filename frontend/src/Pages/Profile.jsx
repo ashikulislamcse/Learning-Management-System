@@ -45,3 +45,6 @@ const Profile = () => {
 };
 
 export default Profile;
+
+
+// Profile Section

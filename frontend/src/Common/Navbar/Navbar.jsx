@@ -69,12 +69,6 @@ const Navbar = () => {
               <>
                 <div className="flex flex-col gap-2">
                   <Link
-                    to="/profile"
-                    className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md transition"
-                  >
-                    <User size={18} /> Profile
-                  </Link>
-                  <Link
                     to="/deshboard"
                     className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md transition"
                   >

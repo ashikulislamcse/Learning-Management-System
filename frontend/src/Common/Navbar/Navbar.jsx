@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { LogOut, User, BookOpen } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import Logo from "../../../public/Logo.png";
-import { assets } from "../../assets/assets";
 import { PiSlideshowBold } from "react-icons/pi";
-
 import {
   Avatar,
   AvatarFallback,
@@ -22,6 +20,7 @@ import axios from "axios";
 import { USER_API_END_POINT } from "../../Utils/constant";
 import { setUser } from "../../Redux/authSlice";
 import { toast } from "sonner";
+import { assets } from "../../assets/assets";
 
 const Navbar = () => {
   const [showModal, setShowModal] = useState(false);
@@ -45,98 +44,107 @@ const Navbar = () => {
       toast.error(error.response.data.message);
     }
   };
+
   return (
     <div className="flex items-center justify-between px-4 sm:px-10 md:px-14 lg:px-36 py-4 border-b border-gray-500 bg-cyan-100/70">
       <Link to="/">
-        <img
-          src={Logo}
-          alt="Educator"
-          className="w-28 lg:w-32 cursor-pointer"
-        />
+        <img src={Logo} alt="Educator" className="w-24 sm:w-28 lg:w-32 cursor-pointer" />
       </Link>
 
       {/* Desktop Menu */}
-      {user ? (
-        <Popover>
-          <PopoverTrigger asChild>
-            <Avatar className="cursor-pointer hover:shadow-lg transition">
-              <AvatarImage src={user?.profile?.profilePhoto} alt="User" />
-              <AvatarFallback>U</AvatarFallback>
-            </Avatar>
-          </PopoverTrigger>
-          <PopoverContent className="w-44 p-2 bg-white shadow-lg rounded-md border">
-            {user && user.role === "instructor" ? (
+      <div className="hidden md:flex items-center gap-6">
+        {user ? (
+          <Popover>
+            <PopoverTrigger asChild>
+              <Avatar className="cursor-pointer hover:shadow-lg transition">
+                <AvatarImage src={user?.profile?.profilePhoto} alt="User" />
+                <AvatarFallback>U</AvatarFallback>
+              </Avatar>
+            </PopoverTrigger>
+            <PopoverContent className="w-44 p-2 bg-white shadow-lg rounded-md border">
+              <div className="flex flex-col gap-2">
+                {user.role === "instructor" ? (
+                  <>
+                    <Link to="/dashboard" className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md transition">
+                      <PiSlideshowBold size={18} /> Dashboard
+                    </Link>
+                    <button onClick={logoutHandler} className="flex items-center gap-2 p-2 text-left hover:bg-gray-100 rounded-md transition cursor-pointer">
+                      <LogOut size={18} /> Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/profile" className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md transition">
+                      <User size={18} /> Profile
+                    </Link>
+                    <button onClick={logoutHandler} className="flex items-center gap-2 p-2 text-left hover:bg-gray-100 rounded-md transition cursor-pointer">
+                      <LogOut size={18} /> Logout
+                    </button>
+                  </>
+                )}
+              </div>
+            </PopoverContent>
+          </Popover>
+        ) : (
+          <>
+            <Button asChild className="bg-green-500 hover:bg-green-600 text-white font-bold px-4 py-2 rounded-lg shadow-md transition flex items-center gap-2">
+              <Link to="/login" onClick={() => setShowModal(false)}>
+                <FaSignInAlt className="text-lg" /> Login
+              </Link>
+            </Button>
+            <Button asChild className="bg-blue-500 hover:bg-blue-600 text-white font-bold px-4 py-2 rounded-lg shadow-md transition flex items-center gap-2">
+              <Link to="/register" onClick={() => setShowModal(false)}>
+                <FaUserPlus className="text-lg" /> Register
+              </Link>
+            </Button>
+          </>
+        )}
+      </div>
+
+      {/* Mobile Menu */}
+      <div className="md:hidden flex items-center">
+        <button onClick={() => setShowModal(!showModal)}>
+          <Avatar className="cursor-pointer hover:shadow-lg transition">
+            <AvatarImage src={user?.profile?.profilePhoto || assets.user_icon} alt="User" />
+            <AvatarFallback>U</AvatarFallback>
+          </Avatar>
+        </button>
+      </div>
+
+      {showModal && (
+        <div className="absolute top-16 right-4 w-48 bg-white shadow-lg rounded-md p-3 flex flex-col gap-2 border">
+          {user ? (
+            user.role === "instructor" ? (
               <>
-                <div className="flex flex-col gap-2">
-                  <Link
-                    to="/deshboard"
-                    className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md transition"
-                  >
-                    <PiSlideshowBold size={18} /> Deshboard
-                  </Link>
-                  <button
-                    onClick={logoutHandler}
-                    className="flex items-center gap-2 p-2 text-left hover:bg-gray-100 rounded-md transition cursor-pointer"
-                  >
-                    <LogOut size={18} /> Logout
-                  </button>
-                </div>
+                <Link to="/dashboard" className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md transition" onClick={() => setShowModal(false)}>
+                  <PiSlideshowBold size={18} /> Dashboard
+                </Link>
+                <button onClick={logoutHandler} className="flex items-center gap-2 p-2 text-left hover:bg-gray-100 rounded-md transition cursor-pointer">
+                  <LogOut size={18} /> Logout
+                </button>
               </>
             ) : (
               <>
-                <div className="flex flex-col gap-2">
-                  <Link
-                    to="/profile"
-                    className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md transition"
-                  >
-                    <User size={18} /> Profile
-                  </Link>
-                  <button
-                    onClick={logoutHandler}
-                    className="flex items-center gap-2 p-2 text-left hover:bg-gray-100 rounded-md transition cursor-pointer"
-                  >
-                    <LogOut size={18} /> Logout
-                  </button>
-                </div>
+                <Link to="/profile" className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md transition" onClick={() => setShowModal(false)}>
+                  <User size={18} /> Profile
+                </Link>
+                <button onClick={logoutHandler} className="flex items-center gap-2 p-2 text-left hover:bg-gray-100 rounded-md transition cursor-pointer">
+                  <LogOut size={18} /> Logout
+                </button>
               </>
-            )}
-          </PopoverContent>
-        </Popover>
-      ) : (
-        <div className="hidden md:flex gap-3">
-          <Button
-            className="bg-gradient-to-r from-green-500 to-green-600 text-white font-bold p-3 rounded-lg shadow-lg transition duration-300 ease-in-out hover:from-green-600 hover:to-green-700 hover:shadow-xl flex items-center gap-2"
-            asChild
-          >
-            <Link to="/login">
-              <FaSignInAlt className="text-lg" />
-              Login
-            </Link>
-          </Button>
-          <Button
-            className="bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold p-3 rounded-lg shadow-lg transition duration-300 ease-in-out hover:from-blue-600 hover:to-blue-700 hover:shadow-xl flex items-center gap-2"
-            asChild
-          >
-            <Link to="/register">
-              <FaUserPlus className="text-lg" />
-              Register
-            </Link>
-          </Button>
+            )
+          ) : (
+            <>
+              <Link to="/login" className="flex items-center gap-2 p-2 bg-green-500 text-white rounded-md transition hover:bg-green-600" onClick={() => setShowModal(false)}>
+                <FaSignInAlt className="text-lg" /> Login
+              </Link>
+              <Link to="/register" className="flex items-center gap-2 p-2 bg-blue-500 text-white rounded-md transition hover:bg-blue-600" onClick={() => setShowModal(false)}>
+                <FaUserPlus className="text-lg" /> Register
+              </Link>
+            </>
+          )}
         </div>
       )}
-
-      {/* Mobile Menu */}
-      <div className="md:hidden flex items-center gap-2 sm:gap-5 text-gray-500">
-        <img
-          src={assets.user_icon || "https://via.placeholder.com/40"}
-          alt="User Icon"
-          className="w-8 h-8 cursor-pointer"
-          onClick={() => setShowModal(true)}
-        />
-      </div>
-
-      {/* Auth Modal Popup */}
-      {showModal && <AuthModal closeModal={() => setShowModal(false)} />}
     </div>
   );
 };

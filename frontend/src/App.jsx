@@ -7,6 +7,7 @@ import LoginPage from "./Authentication/Login";
 import Profile from "./Pages/Profile";
 import Footer from "./Common/Footer";
 import CourseList from "./Pages/CourseList";
+import CourseDetails from "./Common/CourseDetails";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/course-list" element={<CourseList />} />
+          <Route path="/course/:id" element={<CourseDetails />} />
         </Routes>
         <Footer/>
       </BrowserRouter>
@@ -28,7 +30,3 @@ const App = () => {
 };
 
 export default App;
-
-
-
-// App Section

@@ -25,5 +25,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
-// Profile Page Here

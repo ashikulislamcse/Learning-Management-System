@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { dummyCourses } from "../assets/assets";
 import CourseCard from "../Common/CourseCard";
 
